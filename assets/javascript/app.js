@@ -1,153 +1,156 @@
-const start = document.getElementById("start");
-const quiz = document.getElementById("quiz");
-const question = document.getElementById("question");
-const qImg = document.getElementById("qImg");
-const choiceA = document.getElementById("A");
-const choiceB = document.getElementById("B");
-const choiceC = document.getElementById("C");
-const counter = document.getElementById("counter");
-const timeGauge = document.getElementById("timeGauge");
-const progress = document.getElementById("progress");
-const scoreDiv = document.getElementById("scoreContainer");
+$('#start').on('click',function(){
+   game.start(); 
+})
+$(document).on('click','#end',function(){
+    game.done();
+})
 
-// create our questions
-let questions = [
-    {
-        question : "What does HTML stand for?",
-        imgSrc : "img/html.png",
-        choiceA : "Correct",
-        choiceB : "Wrong",
-        choiceC : "Wrong",
-        correct : "A"
-    },{
-        question : "What does CSS stand for?",
-        imgSrc : "img/css.png",
-        choiceA : "Wrong",
-        choiceB : "Correct",
-        choiceC : "Wrong",
-        correct : "B"
-    },{
-        question : "What does JS stand for?",
-        imgSrc : "img/js.png",
-        choiceA : "Wrong",
-        choiceB : "Wrong",
-        choiceC : "Correct",
-        correct : "C"
-    }
-];
+var questions =[{
+    question:'What is the capital of Wisconsin?',
+    answers:['Madison','Milwaukee', 'Green Bay', 'Racine'],
+    correctAnswer:'Madison'
+},
+{
+    question:'What is the capital of Laos? ',
+    answers:['Luang Prabang', 'Vang Vieng', 'Phonsaven', 'Vientiane'],
+    correctAnswer:'Vientiane'
+},
+{
+    question:'What is the capital of Cambodia?',
+    answers:['Siem Reap','Phnom Penh', 'Kamput', 'Sihanokukivlle'],
+    correctAnswer:'Phnom Penh'
+},
+{
+    question:'What is the capital of Malaysia?',
+    answers:['George Town', 'Kula Lumpur','Johor Bahru', 'Malacca'],
+    correctAnswer:'Kula Lumpur'
+},
+{
+    question:'What is the capital of South Korea?',
+    answers:['Busan', 'Jeju', 'Suwon', 'Seoul'],
+    correctAnswer:'Seoul'
+},
+{
+    question:'What is the capital of Indonesia?',
+    answers:['Denpasar', 'Surabaya', 'Jakarta', 'Bandang'],
+    correctAnswer:'Jakarta'
+},
+{
+    question:'What is the capital of Ecuador?',
+    answers:['Tena', 'Quito', 'Cuenca', 'Guayaquil'],
+    correctAnswer:'Quito'
+},
+{
+    question:'What is the capital of Japan?',
+    answers:['Osaka', 'Yokahama', 'Tokyo', 'Sapporo'],
+    correctAnswer:'Tokyo'
+}];
 
-// create some variables
-
-const lastQuestion = questions.length - 1;
-let runningQuestion = 0;
-let count = 0;
-const questionTime = 10; // 10s
-const gaugeWidth = 150; // 150px
-const gaugeUnit = gaugeWidth / questionTime;
-let TIMER;
-let score = 0;
-
-// render a question
-function renderQuestion(){
-    let q = questions[runningQuestion];
+var game={
+    correct:0,
+    incorrect:0,
+    counter:120,
+    countdown: function(){
+        game.counter--;
+        $('#counter').html(game.counter);
+        if(game.counter<=0){
+            
+            game.done();
+        }
+    },
+    start: function(){
+        timer=setInterval(game.countdown,1000);
+        $('#container_in_Container').prepend('<h2>Time Remaining: <span id ="counter">120</span> Seconds</h2>');
+        $('#start').remove();
+        for(var i=0; i<questions.length; i++){
+            $('#container_in_Container').append('<span><h2> '+ questions[i].question+'</h2></span>');
+            
+        for(var a=0; a<questions[i].answers.length; a++){
+            $('#container_in_Container').append("<input type='radio' name='question-"+i+"' value='" +questions[i].answers[a]+"'>"+questions[i].answers[a]) 
     
-    question.innerHTML = "<p>"+ q.question +"</p>";
-    qImg.innerHTML = "<img src="+ q.imgSrc +">";
-    choiceA.innerHTML = q.choiceA;
-    choiceB.innerHTML = q.choiceB;
-    choiceC.innerHTML = q.choiceC;
-}
+            }
+       
+        }
+        $('#container_in_Container').append('<br><button id="end">Done</button>');
+    },
+    done:function(){
+        $.each($("input[name='question-0]:checked"),function(){
+            if($(this).val()==questions[0].correctAnswer){
+                game.correct++;
+            }else{
+                game.incorrect++;
+            }
+        });
+        $.each($('input[name="question-1"]:checked'),function(){
+            if($(this).val()==questions[1].correctAnswer){
+                game.correct++;
+            }else{
+                game.incorrect++;
+            }
+        });
+        $.each($('input[name="question-2"]:checked'),function(){
+            if($(this).val()==questions[2].correctAnswer){
+                game.correct++;
+            }else{
+                game.incorrect++;
+            }
+        });
+        $.each($('input[name="question-3"]:checked'),function(){
+            if($(this).val()==questions[3].correctAnswer){
+                game.correct++;
+            }else{
+                game.incorrect++;
+            }
+        });
+        $.each($('input[name="question-4"]:checked'),function(){
+            if($(this).val()==questions[4].correctAnswer){
+                game.correct++;
+            }else{
+                game.incorrect++;
+            }
+        });
+        $.each($('input[name="question-5"]:checked'),function(){
+            if($(this).val()==questions[5].correctAnswer){
+                game.correct++;
+            }else{
+                game.incorrect++;
+            }
+        });
+        $.each($('input[name="question-6"]:checked'),function(){
+            if($(this).val()==questions[6].correctAnswer){
+                game.correct++;
+            }else{
+                game.incorrect++;
+            }
+        });
+        $.each($('input[name="question-7"]:checked'),function(){
+            if($(this).val()==questions[7].correctAnswer){
+                game.correct++;
+            }else{
+                game.incorrect++;
+            }
+        });
+        this.result();
+        },
+        result: function(){
+          clearInterval(timer);
+          $('#container_in_Container h2') .remove(); 
 
-start.addEventListener("click",startQuiz);
-
-// start quiz
-function startQuiz(){
-    start.style.display = "none";
-    renderQuestion();
-    quiz.style.display = "block";
-    renderProgress();
-    renderCounter();
-    TIMER = setInterval(renderCounter,1000); // 1000ms = 1s
-}
-
-// render progress
-function renderProgress(){
-    for(let qIndex = 0; qIndex <= lastQuestion; qIndex++){
-        progress.innerHTML += "<div class='prog' id="+ qIndex +"></div>";
-    }
-}
-
-// counter render
-
-function renderCounter(){
-    if(count <= questionTime){
-        counter.innerHTML = count;
-        timeGauge.style.width = count * gaugeUnit + "px";
-        count++
-    }else{
-        count = 0;
-        // change progress color to red
-        answerIsWrong();
-        if(runningQuestion < lastQuestion){
-            runningQuestion++;
-            renderQuestion();
-        }else{
-            // end the quiz and show the score
-            clearInterval(TIMER);
-            scoreRender();
+          $('#container_in_Container').html('<h2>All done.</h2>');
+          $('#container_in_Container').append('<h3>Correct Answer: ' + this.correct +'</h3>');
+          $('#container_in_Container').append('<h3>Incorrect Answer: ' +this.incorrect+'</h3>');
+          $('#container_in_Container').append('<h3>Unanswered: '+(questions.length-(this.incorrect+this.correct))+'</h3>');
         }
     }
-}
 
-// checkAnwer
 
-function checkAnswer(answer){
-    if( answer == questions[runningQuestion].correct){
-        // answer is correct
-        score++;
-        // change progress color to green
-        answerIsCorrect();
-    }else{
-        // answer is wrong
-        // change progress color to red
-        answerIsWrong();
-    }
-    count = 0;
-    if(runningQuestion < lastQuestion){
-        runningQuestion++;
-        renderQuestion();
-    }else{
-        // end the quiz and show the score
-        clearInterval(TIMER);
-        scoreRender();
-    }
-}
 
-// answer is correct
-function answerIsCorrect(){
-    document.getElementById(runningQuestion).style.backgroundColor = "#0f0";
-}
 
-// answer is Wrong
-function answerIsWrong(){
-    document.getElementById(runningQuestion).style.backgroundColor = "#f00";
-}
 
-// score render
-function scoreRender(){
-    scoreDiv.style.display = "block";
-    
-    // calculate the amount of question percent answered by the user
-    const scorePerCent = Math.round(100 * score/questions.length);
-    
-    // choose the image based on the scorePerCent
-    let img = (scorePerCent >= 80) ? "img/5.png" :
-              (scorePerCent >= 60) ? "img/4.png" :
-              (scorePerCent >= 40) ? "img/3.png" :
-              (scorePerCent >= 20) ? "img/2.png" :
-              "img/1.png";
-    
-    scoreDiv.innerHTML = "<img src="+ img +">";
-    scoreDiv.innerHTML += "<p>"+ scorePerCent +"%</p>";
-}
+
+
+
+
+
+
 
